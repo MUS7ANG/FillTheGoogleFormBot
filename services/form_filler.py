@@ -1,7 +1,5 @@
 import time
-import tempfile
 import os
-import shutil
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -14,26 +12,19 @@ from services.time_sync import get_exact_time, get_bishkek_time
 async def fill_form(bot, user_id, form_url, answers):
     print(f"!!! fill_form вызвана для user_id={user_id} в {get_bishkek_time()} !!!")
     driver = None
-    temp_dir = None
     try:
         print("Инициализация ChromeDriver...")
         options = webdriver.ChromeOptions()
 
-        # Проверяем текущие CHROME_OPTIONS
+        # Логируем окружение
         print("Текущие CHROME_OPTIONS:", CHROME_OPTIONS)
+        print("Проверка существования Chrome:", os.path.exists("/usr/local/bin/google-chrome"))
+        print("Проверка существования ChromeDriver:", os.path.exists("/usr/local/bin/chromedriver"))
 
-        # Создаём уникальную временную директорию
-        temp_dir = tempfile.mkdtemp(prefix="chrome-data-")
-        print(f"Создана временная директория: {temp_dir}")
-
-        # Фильтруем --user-data-dir из CHROME_OPTIONS
-        filtered_options = [opt for opt in CHROME_OPTIONS if not opt.startswith("--user-data-dir")]
-        print("Отфильтрованные опции:", filtered_options)
-        options.add_argument(f"--user-data-dir={temp_dir}")
-        for option in filtered_options:
+        # Применяем только базовые опции, без --user-data-dir
+        for option in CHROME_OPTIONS:
             options.add_argument(option)
 
-        # Указываем путь к Chrome
         options.binary_location = "/usr/local/bin/google-chrome"
         print(f"Путь к Chrome: {options.binary_location}")
 
@@ -83,8 +74,5 @@ async def fill_form(bot, user_id, form_url, answers):
         if driver is not None:
             driver.quit()
             print("Браузер закрыт.")
-        if temp_dir and os.path.exists(temp_dir):
-            shutil.rmtree(temp_dir)
-            print(f"Временная директория удалена: {temp_dir}")
         else:
-            print("Браузер или директория не были созданы, ничего удалять не нужно.")
+            print("Браузер не был запущен, ничего закрывать не нужно.")
