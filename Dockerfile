@@ -5,7 +5,7 @@ FROM python:3.11-slim
 RUN apt-get update && apt-get install -y \
     wget \
     unzip \
-    gnupg \  # Добавляем gnupg для apt-key
+    gnupg \
     libglib2.0-0 \
     libnss3 \
     libgconf-2-4 \
