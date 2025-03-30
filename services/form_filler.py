@@ -64,6 +64,7 @@ async def fill_form(bot, user_id, form_url, answers):
 
         time.sleep(3)
         print("URL после отправки:", driver.current_url)
+        print("Все добавленные аргументы:", options.arguments)
 
         bishkek_time = get_bishkek_time().strftime("%H:%M:%S %d-%m-%Y")
         await bot.send_message(user_id, f"✅ Форма отправлена в {bishkek_time} по времени Бишкека!")
@@ -76,3 +77,4 @@ async def fill_form(bot, user_id, form_url, answers):
             print("Браузер закрыт.")
         else:
             print("Браузер не был запущен, ничего закрывать не нужно.")
+
