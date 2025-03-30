@@ -19,14 +19,21 @@ async def fill_form(bot, user_id, form_url, answers):
         print("Инициализация ChromeDriver...")
         options = webdriver.ChromeOptions()
 
+        # Проверяем текущие CHROME_OPTIONS
+        print("Текущие CHROME_OPTIONS:", CHROME_OPTIONS)
+
+        # Создаём уникальную временную директорию
         temp_dir = tempfile.mkdtemp(prefix="chrome-data-")
         print(f"Создана временная директория: {temp_dir}")
 
+        # Фильтруем --user-data-dir из CHROME_OPTIONS
         filtered_options = [opt for opt in CHROME_OPTIONS if not opt.startswith("--user-data-dir")]
+        print("Отфильтрованные опции:", filtered_options)
         options.add_argument(f"--user-data-dir={temp_dir}")
         for option in filtered_options:
             options.add_argument(option)
 
+        # Указываем путь к Chrome
         options.binary_location = "/usr/local/bin/google-chrome"
         print(f"Путь к Chrome: {options.binary_location}")
 
