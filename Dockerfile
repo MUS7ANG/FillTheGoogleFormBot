@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
     libxrender1 \
     libxtst6 \
     libxi6 \
+    psmisc \  # Для killall
     && rm -rf /var/lib/apt/lists/*
 
 # Установка Chrome 134.0.6998.118
@@ -37,5 +38,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Копирование кода
 COPY . .
 
-# Команда запуска
-CMD ["python", "main.py"]
+# Завершаем процессы Chrome перед запуском
+CMD killall chromedriver chrome || true && python main.py
