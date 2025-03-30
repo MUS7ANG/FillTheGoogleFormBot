@@ -38,5 +38,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Копирование кода
 COPY . .
 
-# Завершаем процессы Chrome перед запуском
-CMD killall chromedriver chrome || true && python main.py
+# Очищаем /tmp и завершаем процессы Chrome перед запуском
+CMD rm -rf /tmp/* && killall chromedriver chrome || true && python main.py

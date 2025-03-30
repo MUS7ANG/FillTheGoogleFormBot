@@ -10,5 +10,7 @@ BISHKEK_TZ = timezone("Asia/Bishkek")
 CHROME_OPTIONS = [
     "--headless",
     "--no-sandbox",
-    "--disable-dev-shm-usage"
+    "--disable-dev-shm-usage",
+    "--disable-gpu",
+    "--single-process"
 ]
