@@ -1,6 +1,7 @@
 import time
 import tempfile
 import os
+import shutil
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -25,6 +26,9 @@ async def fill_form(bot, user_id, form_url, answers):
         options.add_argument(f"--user-data-dir={temp_dir}")
         for option in filtered_options:
             options.add_argument(option)
+
+        options.binary_location = "/usr/local/bin/google-chrome"
+        print(f"Путь к Chrome: {options.binary_location}")
 
         driver_path = "/usr/local/bin/chromedriver"
         print(f"Попытка запустить ChromeDriver из: {driver_path}")
@@ -73,7 +77,6 @@ async def fill_form(bot, user_id, form_url, answers):
             driver.quit()
             print("Браузер закрыт.")
         if temp_dir and os.path.exists(temp_dir):
-            import shutil
             shutil.rmtree(temp_dir)
             print(f"Временная директория удалена: {temp_dir}")
         else:
