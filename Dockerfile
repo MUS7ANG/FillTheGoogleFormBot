@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
     libxrender1 \
     libxtst6 \
     libxi6 \
-    psmisc \  # Для killall
+    psmisc \
     && rm -rf /var/lib/apt/lists/*
 
 # Установка Chrome 134.0.6998.118
