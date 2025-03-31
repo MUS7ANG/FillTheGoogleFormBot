@@ -12,14 +12,15 @@ async def fill_form(bot, user_id, form_url, answers):
     driver = None
     temp_dir = None
     try:
-        temp_dir = tempfile.mkdtemp(prefix="chrome-data-")
+        temp_dir = tempfile.mkdtemp()
         print(f"Создана временная директория: {temp_dir}")
 
         options = webdriver.ChromeOptions()
         options.add_argument(f"--user-data-dir={temp_dir}")
-
         options.add_argument("--headless")
-        options.binary_location = "/usr/local/bin/google-chrome"
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        options.binary_location = "/usr/bin/google-chrome"
 
         driver_path = "/usr/local/bin/chromedriver"
         service = Service(executable_path=driver_path)
