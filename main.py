@@ -3,6 +3,10 @@ from aiogram import Bot, Dispatcher
 from config.config import BOT_TOKEN
 from handlers.telegram import register_handlers, scheduler
 
+async def reset_webhook(bot):
+    await bot.delete_webhook()
+    await bot.session.close()
+
 async def main():
     print("Запуск бота...")
     bot = Bot(token=BOT_TOKEN)
@@ -15,11 +19,8 @@ async def main():
     scheduler.start()
     print("Планировщик активен:", scheduler.running)
 
-    async def reset_webhook():
-        await bot.delete_webhook()
-        await bot.session.close()
+    await reset_webhook(bot)
 
-    asyncio.run(reset_webhook())
     print("Бот начал опрос Telegram API.")
     await dp.start_polling(bot)
 
