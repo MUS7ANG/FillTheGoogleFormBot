@@ -1,11 +1,12 @@
-# Базовый образ с Python
+# Используем Python 3.11 slim
 FROM python:3.11-slim
 
-# Установка зависимостей системы
+# Устанавливаем зависимости системы
 RUN apt-get update && apt-get install -y \
     wget \
     unzip \
     gnupg \
+    curl \
     libglib2.0-0 \
     libnss3 \
     libgconf-2-4 \
@@ -16,18 +17,19 @@ RUN apt-get update && apt-get install -y \
     psmisc \
     && rm -rf /var/lib/apt/lists/*
 
-# Установка Chrome 134.0.6998.118
-RUN wget -O /tmp/chrome.zip https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.118/linux64/chrome-linux64.zip \
-    && unzip /tmp/chrome.zip -d /usr/local/bin/ \
-    && mv /usr/local/bin/chrome-linux64/chrome /usr/bin/google-chrome \
-    && chmod +x /usr/bin/google-chrome \
-    && rm -rf /tmp/chrome.zip
+# Установка Google Chrome
+RUN curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \
+    && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | tee /etc/apt/sources.list.d/google-chrome.list \
+    && apt-get update \
+    && apt-get install -y google-chrome-stable \
+    && rm -rf /var/lib/apt/lists/*
 
-# Установка ChromeDriver 134.0.6998.118
-RUN wget -O /tmp/chromedriver.zip https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.118/linux64/chromedriver-linux64.zip \
+# Установка ChromeDriver (та же версия, что и Chrome)
+RUN CHROME_VERSION=$(google-chrome --version | awk '{print $3}') \
+    && CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION") \
+    && wget -O /tmp/chromedriver.zip "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip" \
     && unzip /tmp/chromedriver.zip -d /usr/local/bin/ \
-    && mv /usr/local/bin/chromedriver-linux64/chromedriver /usr/bin/chromedriver \
-    && chmod +x /usr/bin/chromedriver \
+    && chmod +x /usr/local/bin/chromedriver \
     && rm -rf /tmp/chromedriver.zip
 
 # Установка зависимостей Python
@@ -35,8 +37,8 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Копирование кода
+# Копируем код бота
 COPY . .
 
-# Запуск приложения
-CMD killall chromedriver || true && killall google-chrome || true && python main.py
+# Запуск контейнера
+CMD ["python", "main.py"]
