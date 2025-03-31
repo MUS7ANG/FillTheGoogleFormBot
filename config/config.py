@@ -12,5 +12,8 @@ CHROME_OPTIONS = [
     "--no-sandbox",
     "--disable-dev-shm-usage",
     "--disable-gpu",
-    "--single-process"
+    "--single-process",
+    "--window-size=1920,1080",
+    "--disable-extensions",
+    "--no-first-run"
 ]
