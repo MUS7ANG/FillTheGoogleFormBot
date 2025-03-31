@@ -22,8 +22,8 @@ async def fill_form(bot, user_id, form_url, answers):
 
         # Убиваем все процессы Chrome и ChromeDriver перед запуском
         print("Завершаем процессы Chrome и ChromeDriver...")
-        os.system("pkill -9 chrome")
-        os.system("pkill -9 chromedriver")
+        os.system("killall -9 chrome")
+        os.system("killall -9 chromedriver")
 
         print("Инициализация ChromeDriver...")
         options = webdriver.ChromeOptions()
@@ -50,7 +50,10 @@ async def fill_form(bot, user_id, form_url, answers):
         # Путь к ChromeDriver
         driver_path = "/usr/local/bin/chromedriver"
         print(f"Попытка запустить ChromeDriver из: {driver_path}")
-        service = Service(executable_path=driver_path)
+        service = Service(
+            executable_path=driver_path,
+            log_path="/tmp/chromedriver.log"  # Логи ChromeDriver
+        )
         driver = webdriver.Chrome(service=service, options=options)
         print("ChromeDriver успешно запущен.")
 
@@ -97,6 +100,11 @@ async def fill_form(bot, user_id, form_url, answers):
         await bot.send_message(user_id, f"✅ Форма отправлена в {bishkek_time} по времени Бишкека!")
     except Exception as e:
         print(f"Ошибка в fill_form: {str(e)}")
+        # Выводим содержимое лога ChromeDriver, если он есть
+        if os.path.exists("/tmp/chromedriver.log"):
+            with open("/tmp/chromedriver.log", "r") as f:
+                print("Содержимое chromedriver.log:")
+                print(f.read())
         await bot.send_message(user_id, f"❌ Ошибка при заполнении формы: {str(e)}")
     finally:
         if driver is not None:
