@@ -15,6 +15,11 @@ async def main():
     scheduler.start()
     print("Планировщик активен:", scheduler.running)
 
+    async def reset_webhook():
+        await bot.delete_webhook()
+        await bot.session.close()
+
+    asyncio.run(reset_webhook())
     print("Бот начал опрос Telegram API.")
     await dp.start_polling(bot)
 

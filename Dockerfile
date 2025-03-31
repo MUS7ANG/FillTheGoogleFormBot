@@ -19,15 +19,15 @@ RUN apt-get update && apt-get install -y \
 # Установка Chrome 134.0.6998.118
 RUN wget -O /tmp/chrome.zip https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.118/linux64/chrome-linux64.zip \
     && unzip /tmp/chrome.zip -d /usr/local/bin/ \
-    && mv /usr/local/bin/chrome-linux64/chrome /usr/local/bin/google-chrome \
-    && chmod +x /usr/local/bin/google-chrome \
+    && mv /usr/local/bin/chrome-linux64/chrome /usr/bin/google-chrome \
+    && chmod +x /usr/bin/google-chrome \
     && rm -rf /tmp/chrome.zip
 
 # Установка ChromeDriver 134.0.6998.118
 RUN wget -O /tmp/chromedriver.zip https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.118/linux64/chromedriver-linux64.zip \
     && unzip /tmp/chromedriver.zip -d /usr/local/bin/ \
-    && mv /usr/local/bin/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver \
-    && chmod +x /usr/local/bin/chromedriver \
+    && mv /usr/local/bin/chromedriver-linux64/chromedriver /usr/bin/chromedriver \
+    && chmod +x /usr/bin/chromedriver \
     && rm -rf /tmp/chromedriver.zip
 
 # Установка зависимостей Python
@@ -39,4 +39,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Запуск приложения
-CMD pkill -f chrome || true && pkill -f chromedriver || true && python main.py
+CMD killall chromedriver || true && killall google-chrome || true && python main.py
