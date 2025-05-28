@@ -11,3 +11,7 @@ FIREFOX_OPTIONS = [
 
 # Часовой пояс Бишкека
 BISHKEK_TZ = pytz.timezone("Asia/Bishkek")
+
+#BOT_TOKEN = os.environ.get("BOT_TOKEN")
+BOT_TOKEN = '7803855448:AAGmIMoPz2Dnd27XZZlihBD5hyJuP7DYhJw'
+NTP_SERVER = "pool.ntp.org"
