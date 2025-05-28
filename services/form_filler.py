@@ -24,7 +24,7 @@ async def fill_form(bot, user_id, form_url, answers):
         driver_path = "/usr/bin/chromedriver"  # Убедись, что chromedriver установлен
         service = Service(executable_path=driver_path)
 
-        driver = webdriver.Chrome(service=service, options=options)
+        driver = webdriver.Chrome()
         print("Chromedriver успешно запущен.")
 
         driver.get(form_url)
