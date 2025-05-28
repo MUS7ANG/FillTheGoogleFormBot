@@ -13,13 +13,12 @@ async def fill_form(bot, user_id, form_url, answers):
     try:
         print("Инициализация Chrome и Chromedriver...")
 
-        options = Options()
-        options.add_argument("--headless")
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
-        options.add_argument("--disable-gpu")
-        options.add_argument("--window-size=1920,1080")
-        options.binary_location = "/usr/bin/chromium"  # Убедись, что chromium установлен
+        chrome_options = Options()
+        chrome_options.add_argument("--headless=new")  # или просто "--headless" (зависит от версии)
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_options.add_argument("--disable-gpu")
+        chrome_options.add_argument("--remote-debugging-port=9222")
 
         driver_path = "/usr/bin/chromedriver"  # Убедись, что chromedriver установлен
         service = Service(executable_path=driver_path)
