@@ -48,8 +48,9 @@ async def fill_form(bot, user_id, form_url, answers):
                 inputs[i].send_keys(answer)
                 print(f"Заполнено поле {i + 1}: {answer}")
 
+        print("Поиск кнопки отправки...")
         submit_button = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, '//span[contains(text(), "Отправить")] | //div[contains(@role, "button") and contains(text(), "Отправить")]'))
+            EC.element_to_be_clickable((By.XPATH, '//span[text()="Отправить"]/ancestor::div[@role="button"]'))
         )
         print("Кнопка 'Отправить' найдена.")
         submit_button.click()
